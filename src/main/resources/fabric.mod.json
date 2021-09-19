@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "id": "immersivedamage",
+  "version": "1.0.0",
+
+  "name": "Immersive Damage",
+  "description": "This mod establishes a connection via the app to an android phone and vibrates it after taking damage in game.",
+  "authors": [
+    "Skillter"
+  ],
+  "contact": {
+    "homepage": "https://github.com/Skillter",
+    "sources": "https://github.com/Skillter/ImmersiveDamage",
+    "issues": "https://github.com/Skillter/ImmersiveDamage/issues"
+  },
+
+  "icon": "assets/immersivedamage/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "skillter.immersivedamage.ImmersiveDamage"
+    ],
+    "modmenu": [ "skillter.immersivedamage.config.ModMenuIntegration" ]
+  },
+  "mixins": [
+    "immersivedamage.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.11.3",
+    "fabric": "*",
+    "minecraft": "1.17.x",
+    "java": ">=16"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}

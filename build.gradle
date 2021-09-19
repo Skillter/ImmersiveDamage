@@ -8,7 +8,7 @@ targetCompatibility = JavaVersion.VERSION_16
 
 version = project.mod_version
 group = project.maven_group
-archivesBaseName = "${project.mod_name}-${project.minecraft_version}-${project.mod_version}"
+archivesBaseName = "${project.mod_name}-${project.minecraft_version}"
 
 repositories {
 	mavenCentral()

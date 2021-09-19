@@ -1,0 +1,8 @@
+{
+  "text.autoconfig.immersivedamage.title": "Immersive Damage Config",
+  "text.autoconfig.immersivedamage.option.enabled": "Enabled",
+  "text.autoconfig.immersivedamage.option.ip": "IP",
+  "text.autoconfig.immersivedamage.option.port": "Port",
+  "text.autoconfig.immersivedamage.option.maxStrengthAtHP": "Vibrations have full strength at how much taken damage in HP? (1 heart = 2 HP)",
+  "text.autoconfig.immersivedamage.option.duration": "Duration of every vibration (ms)"
+}

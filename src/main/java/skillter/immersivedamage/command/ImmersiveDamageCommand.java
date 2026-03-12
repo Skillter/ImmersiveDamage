@@ -93,10 +93,10 @@ public class ImmersiveDamageCommand {
     }
 
     private static void sendTestPacket(int duration, int strength) {
-        DamagePacket damagePacket = new DamagePacket(duration, strength);
+        DamagePacket damagePacket = new DamagePacket(0, duration, strength);
         String ip = config.getConfig().ip;
         int port = config.getConfig().port;
-        UDPManager.udpClient.sendPacketAsync(ip, port, damagePacket);
+        UDPManager.udpClient.sendPacketReliableAsync(ip, port, damagePacket);
         mc.player.sendSystemMessage(Text.of(ImmersiveDamage.prefix + "Sending damage packet with duration " + damagePacket.duration + " and strength " + damagePacket.strength + " to the app on " + ip + ":" + port), mc.player.getUuid());
     }
 

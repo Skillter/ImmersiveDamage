@@ -35,11 +35,11 @@ public class PlayerFinalDamageListener {
         if (config.getConfig().enabled) {
             int duration = config.getConfig().duration;
             int strength = VibrationStrengthCalculator.calculateStrength(amount);
-            DamagePacket damagePacket = new DamagePacket(duration, strength);
+            DamagePacket damagePacket = new DamagePacket(0, duration, strength);
 
             String ip = config.getConfig().ip;
             int port = config.getConfig().port;
-            UDPManager.udpClient.sendPacketAsync(ip, port, damagePacket);
+            UDPManager.udpClient.sendPacketReliableAsync(ip, port, damagePacket);
 
             System.out.println("Sending a packet to: " + ip + ":" + port + " Duration: " + damagePacket.duration + " Strength: " + damagePacket.strength);
         }

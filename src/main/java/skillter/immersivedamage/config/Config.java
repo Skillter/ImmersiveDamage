@@ -1,17 +1,13 @@
 package skillter.immersivedamage.config;
 
-import com.google.common.primitives.Ints;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.ConfigHolder;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
-import me.shedaniel.autoconfig.example.ExampleConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import skillter.immersivedamage.Reference;
-
-import java.util.concurrent.atomic.AtomicInteger;
 
 @me.shedaniel.autoconfig.annotation.Config(name = Reference.MOD_ID)
 public class Config implements ConfigData {

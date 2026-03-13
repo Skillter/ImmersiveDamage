@@ -1,12 +1,4 @@
-BUG: Restoration hearts (more than 10 hearts) breaks damage detection
 
-When the player has restoration (more than 10 hearts) and takes damage, the damage packets 
-don't trigger. The mod thinks no damage was taken.
 
-Likely cause: The damage calculation or health comparison logic doesn't account for 
-health values above the base 10 hearts (20 HP).
-
-Files to investigate:
-- DamageListener.java
-- ManagementHandler.java
-- Any health tracking/comparison logic
+Low priority:
+In config make expandable tab with duration settings (min, max, min starts at, max ends at)

@@ -3,6 +3,7 @@ package skillter.immersivedamage;
 import me.shedaniel.autoconfig.ConfigHolder;
 import net.fabricmc.api.ClientModInitializer;
 import skillter.immersivedamage.command.ImmersiveDamageCommand;
+import skillter.immersivedamage.communication.NetworkDiscovery;
 import skillter.immersivedamage.communication.UDPManager;
 import skillter.immersivedamage.config.Config;
 import skillter.immersivedamage.listener.PlayerFinalDamageListener;
@@ -21,9 +22,13 @@ public class ImmersiveDamage implements ClientModInitializer {
         ImmersiveDamageCommand.registerCommands(); // Register all commands
         PlayerFinalDamageListener.registerEvent();
         UDPManager.init(); // Initialize UDP Client
+        NetworkDiscovery.start(); // Start background discovery
 
         // Shutdown hook to clean up resources
-        Runtime.getRuntime().addShutdownHook(new Thread(UDPManager::shutdown));
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            UDPManager.shutdown();
+            NetworkDiscovery.stop();
+        }));
     }
 
 }

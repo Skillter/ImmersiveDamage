@@ -15,6 +15,9 @@ public class Config implements ConfigData {
 
     public boolean enabled = true;
 
+    @Comment("Auto-detect phone IP via UDP broadcast (enabled by default)")
+    public boolean autoDetect = true;
+
     @Comment("IP on which packets will be sent")
     public String ip = "localhost";
 

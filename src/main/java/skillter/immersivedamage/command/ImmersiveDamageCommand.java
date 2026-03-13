@@ -10,10 +10,13 @@ import net.minecraft.text.Text;
 import skillter.immersivedamage.ContactInfo;
 import skillter.immersivedamage.ImmersiveDamage;
 import skillter.immersivedamage.Reference;
-import skillter.immersivedamage.handler.ManagementHandler;
+import skillter.immersivedamage.communication.NetworkDiscovery;
 import skillter.immersivedamage.communication.UDPManager;
 import skillter.immersivedamage.communication.packet.DamagePacket;
+import skillter.immersivedamage.handler.ManagementHandler;
 import skillter.immersivedamage.util.EnumChatFormatting;
+
+import java.util.List;
 
 import static skillter.immersivedamage.ImmersiveDamage.config;
 
@@ -31,6 +34,14 @@ public class ImmersiveDamageCommand {
                 })
                 .then(ClientCommandManager.literal("toggle").executes(context -> {
                     ManagementHandler.toggleMod(true);
+                    return 1;
+                }))
+                .then(ClientCommandManager.literal("autodetect").executes(context -> {
+                    boolean newValue = !config.getConfig().autoDetect;
+                    config.getConfig().autoDetect = newValue;
+                    config.save();
+                    String status = newValue ? EnumChatFormatting.GREEN + "enabled" : EnumChatFormatting.RED + "disabled";
+                    mc.player.sendSystemMessage(Text.of(ImmersiveDamage.prefix + "Auto-detect " + status + ". Use /" + baseCommand + " devices to see discovered phones."), mc.player.getUuid());
                     return 1;
                 }))
                 .then(ClientCommandManager.literal("ip").executes(context -> {
@@ -81,7 +92,62 @@ public class ImmersiveDamageCommand {
                 }).then(ClientCommandManager.argument("newDuration", IntegerArgumentType.integer()).executes(context -> {
                     ManagementHandler.changePort(IntegerArgumentType.getInteger(context, "newDuration"), true);
                     return 1;
+                })))
+                .then(ClientCommandManager.literal("devices").executes(context -> {
+                    showDiscoveredDevices();
+                    return 1;
+                }))
+                .then(ClientCommandManager.literal("selectdevice").then(ClientCommandManager.argument("number", IntegerArgumentType.integer(1)).executes(context -> {
+                    int number = IntegerArgumentType.getInteger(context, "number");
+                    selectDevice(number);
+                    return 1;
                 }))));
+    }
+
+    private static void showDiscoveredDevices() {
+        List<NetworkDiscovery.DiscoveredDevice> devices = NetworkDiscovery.getDiscoveredDevices();
+
+        if (devices.isEmpty()) {
+            mc.player.sendSystemMessage(Text.of(ImmersiveDamage.prefix + EnumChatFormatting.RED + "No devices found. Make sure the app is running on your phone."), mc.player.getUuid());
+            return;
+        }
+
+        mc.player.sendSystemMessage(Text.of(ImmersiveDamage.prefix + "Discovered devices:"), mc.player.getUuid());
+
+        for (int i = 0; i < devices.size(); i++) {
+            NetworkDiscovery.DiscoveredDevice device = devices.get(i);
+            String message = EnumChatFormatting.GREEN + "[" + (i + 1) + "] " + device.deviceModel + EnumChatFormatting.RESET + " (" + device.ip + ":" + device.port + ")";
+            mc.player.sendSystemMessage(Text.of(ImmersiveDamage.prefix + message), mc.player.getUuid());
+        }
+
+        if (devices.size() > 1) {
+            mc.player.sendSystemMessage(Text.of(ImmersiveDamage.prefix + EnumChatFormatting.YELLOW + "Multiple devices found! Use /" + baseCommand + " selectdevice <number> to choose one."), mc.player.getUuid());
+        } else {
+            mc.player.sendSystemMessage(Text.of(ImmersiveDamage.prefix + EnumChatFormatting.GREEN + "Using device: " + devices.get(0)), mc.player.getUuid());
+        }
+    }
+
+    private static void selectDevice(int number) {
+        List<NetworkDiscovery.DiscoveredDevice> devices = NetworkDiscovery.getDiscoveredDevices();
+
+        if (devices.isEmpty()) {
+            mc.player.sendSystemMessage(Text.of(ImmersiveDamage.prefix + EnumChatFormatting.RED + "No devices found. Use /" + baseCommand + " devices to scan."), mc.player.getUuid());
+            return;
+        }
+
+        if (number < 1 || number > devices.size()) {
+            mc.player.sendSystemMessage(Text.of(ImmersiveDamage.prefix + EnumChatFormatting.RED + "Invalid device number. Use /" + baseCommand + " devices to see available devices."), mc.player.getUuid());
+            return;
+        }
+
+        NetworkDiscovery.DiscoveredDevice device = devices.get(number - 1);
+        ManagementHandler.changeIP(device.ip, false);
+        ManagementHandler.changePort(device.port, false);
+        config.getConfig().autoDetect = false;
+        config.save();
+
+        mc.player.sendSystemMessage(Text.of(ImmersiveDamage.prefix + EnumChatFormatting.GREEN + "Selected device: " + device.deviceModel + " (" + device.ip + ":" + device.port + ")\n" +
+                ImmersiveDamage.prefix + "Auto-detect has been disabled. Use /" + baseCommand + " autodetect to re-enable."), mc.player.getUuid());
     }
 
     private static void sendTestPacket() {
@@ -102,7 +168,7 @@ public class ImmersiveDamageCommand {
 
     private static String credits() {
         return "Made with " + EnumChatFormatting.RED + "♥" + EnumChatFormatting.RESET + " by Skillter!\n" +
-                EnumChatFormatting.GOLD + "[Commands]" + EnumChatFormatting.RESET + " /immersivedamage [toggle, ip, port, maxStrengthAtHP, duration, test]\n" +
+                EnumChatFormatting.GOLD + "[Commands]" + EnumChatFormatting.RESET + " /immersivedamage [toggle, autodetect, ip, port, maxStrengthAtHP, duration, test, devices, selectdevice]\n" +
                 EnumChatFormatting.GOLD + "[Discord] " + EnumChatFormatting.GRAY + ContactInfo.DISCORD_USERNAME + "\n" +
                 EnumChatFormatting.GOLD + "[Github] " + EnumChatFormatting.GRAY + ContactInfo.GITHUB_ACCOUNT_LINK + EnumChatFormatting.RESET;
     }

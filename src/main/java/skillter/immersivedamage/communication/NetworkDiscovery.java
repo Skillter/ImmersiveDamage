@@ -62,7 +62,7 @@ public class NetworkDiscovery {
             socket.setSoTimeout(1000);
     
         } catch (SocketException ex) {
-
+            System.out.println("Failed to start discovery: " + ex.getMessage());
             running = false;
             return;
         }
@@ -108,7 +108,7 @@ public class NetworkDiscovery {
             socket.send(packet);
 
         } catch (IOException ex) {
-    
+            System.out.println("Discovery broadcast failed: " + ex.getMessage());
         }
     }
 

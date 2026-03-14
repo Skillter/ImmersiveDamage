@@ -8,6 +8,7 @@ import skillter.immersivedamage.communication.UDPManager;
 import skillter.immersivedamage.config.Config;
 import skillter.immersivedamage.listener.PlayerFinalDamageListener;
 import skillter.immersivedamage.util.EnumChatFormatting;
+import skillter.immersivedamage.util.Multithreading;
 
 public class ImmersiveDamage implements ClientModInitializer {
 
@@ -28,6 +29,7 @@ public class ImmersiveDamage implements ClientModInitializer {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             UDPManager.shutdown();
             NetworkDiscovery.stop();
+            Multithreading.shutdown();
         }));
     }
 

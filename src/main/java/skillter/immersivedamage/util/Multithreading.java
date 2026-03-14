@@ -22,4 +22,8 @@ public class Multithreading {
         executor.execute(r);
     }
 
+    public static void shutdown() {
+        executor.shutdown();
+    }
+
 }

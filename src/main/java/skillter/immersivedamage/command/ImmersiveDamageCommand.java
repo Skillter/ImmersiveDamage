@@ -90,7 +90,7 @@ public class ImmersiveDamageCommand {
                             ImmersiveDamage.prefix + "Current duration: " + config.getConfig().duration), mc.player.getUuid());
                     return 1;
                 }).then(ClientCommandManager.argument("newDuration", IntegerArgumentType.integer()).executes(context -> {
-                    ManagementHandler.changePort(IntegerArgumentType.getInteger(context, "newDuration"), true);
+                    ManagementHandler.changeDuration(IntegerArgumentType.getInteger(context, "newDuration"), true);
                     return 1;
                 })))
                 .then(ClientCommandManager.literal("devices").executes(context -> {
